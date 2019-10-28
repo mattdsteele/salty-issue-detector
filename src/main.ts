@@ -1,16 +1,12 @@
 import * as core from '@actions/core';
-import {wait} from './wait'
+import { GitHub, context } from '@actions/github';
 
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
-    console.log(`Waiting ${ms} milliseconds ...`)
-
-    core.debug((new Date()).toTimeString())
-    await wait(parseInt(ms, 10));
-    core.debug((new Date()).toTimeString())
-
-    core.setOutput('time', new Date().toTimeString());
+    const token = core.getInput('github-token');
+    const gh = new GitHub(token);
+    const payload = JSON.stringify(context.payload);
+    console.log(`Payload: ${payload}`);
   } catch (error) {
     core.setFailed(error.message);
   }
