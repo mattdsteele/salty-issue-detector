@@ -6,13 +6,15 @@ async function run() {
     const token = core.getInput('github-token');
     const gh = new GitHub(token);
     const issue_number = context.payload.issue!.number;
-    const owner = context.payload.repository!.owner.name!;
+    const owner = context.payload.repository!.owner;
     const repo = context.payload.repository!.name;
-    console.log(`issue number: ${issue_number}, ${owner}, ${repo}`);
+    console.log(
+      `issue number: ${issue_number}, ${JSON.stringify(owner)}, ${repo}`
+    );
     const comment = await gh.issues.createComment({
       issue_number,
       repo,
-      owner,
+      owner: 'mattdsteele',
       body: '### Hello this is an automated comment!\n'
     });
     console.log(`Payload: ${JSON.stringify(comment)}`);
