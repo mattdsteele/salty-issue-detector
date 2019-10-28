@@ -2980,15 +2980,7 @@ function run() {
             const token = core.getInput('github-token');
             const gh = new github_1.GitHub(token);
             const issue_number = github_1.context.payload.issue.number;
-            const owner = github_1.context.payload.repository.owner;
-            const repo = github_1.context.payload.repository.name;
-            console.log(`issue number: ${issue_number}, ${JSON.stringify(owner)}, ${repo}`);
-            const comment = yield gh.issues.createComment({
-                issue_number,
-                repo,
-                owner: 'mattdsteele',
-                body: '### Hello this is an automated comment!\n'
-            });
+            const comment = yield gh.issues.createComment(Object.assign({}, github_1.context.repo, { issue_number, body: '### Hello this is an automated comment!\n' }));
             console.log(`Payload: ${JSON.stringify(comment)}`);
         }
         catch (error) {
