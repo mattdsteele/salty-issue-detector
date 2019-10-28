@@ -6316,10 +6316,12 @@ function run() {
             var Analyzer = natural.SentimentAnalyzer;
             var stemmer = __webpack_require__(578).PorterStemmer;
             var analyzer = new Analyzer('English', stemmer, 'afinn');
+            const words = github_1.context.payload.issue.body.split(' ');
+            console.log('going to parse: ', words);
+            const result = analyzer.getSentiment(words);
+            console.log('made it past analyzer', result);
             const token = core.getInput('github-token');
             const gh = new github_1.GitHub(token);
-            const words = github_1.context.payload.issue.body.split(' ');
-            const result = analyzer.getSentiment(words);
             const issue_number = github_1.context.payload.issue.number;
             const params = Object.assign({}, github_1.context.repo, { issue_number, body: `### Hello this is an automated comment!\n **Your sentiment was analyzed to: ${result}**` });
             console.log('params', params, token);
@@ -6327,6 +6329,8 @@ function run() {
             console.log(`Payload: ${JSON.stringify(comment)}`);
         }
         catch (error) {
+            console.error(error);
+            console.error('Sorry!');
             core.setFailed(error.message);
         }
     });

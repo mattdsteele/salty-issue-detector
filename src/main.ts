@@ -7,10 +7,12 @@ async function run() {
     var Analyzer = (natural as any).SentimentAnalyzer;
     var stemmer = require('natural').PorterStemmer;
     var analyzer = new Analyzer('English', stemmer, 'afinn');
+    const words = context.payload.issue!.body!.split(' ');
+    console.log('going to parse: ', words);
+    const result = analyzer.getSentiment(words);
+    console.log('made it past analyzer', result);
     const token = core.getInput('github-token');
     const gh = new GitHub(token);
-    const words = context.payload.issue!.body!.split(' ');
-    const result = analyzer.getSentiment(words);
     const issue_number = context.payload.issue!.number;
     const params = {
       ...context.repo,
@@ -21,6 +23,8 @@ async function run() {
     const comment = await gh.issues.createComment(params);
     console.log(`Payload: ${JSON.stringify(comment)}`);
   } catch (error) {
+    console.error(error);
+    console.error('Sorry!');
     core.setFailed(error.message);
   }
 }
