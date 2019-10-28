@@ -5,8 +5,7 @@
   "description": "TypeScript template action",
   "main": "dist/index.js",
   "scripts": {
-    "build": "ncc build src/main.ts && npm run copy",
-    "copy": "cp -R ./node_modules/natural/lib/natural/sentiment/English dist && mkdir -p dist/node_modules && cp -r ./node_modules/afinn-165 dist/node_modules/afinn-165",
+    "build": "tsc",
     "test": "jest"
   },
   "repository": {
@@ -29,7 +28,6 @@
     "@types/jest": "^24.0.13",
     "@types/natural": "^0.6.1",
     "@types/node": "^12.0.4",
-    "@zeit/ncc": "^0.20.5",
     "jest": "^24.8.0",
     "jest-circus": "^24.7.1",
     "ts-jest": "^24.0.2",
