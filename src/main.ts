@@ -1,9 +1,11 @@
 import * as core from '@actions/core';
+import * as afinn from 'afinn-165';
 import { GitHub, context } from '@actions/github';
 import * as natural from 'natural';
 
 async function run() {
   try {
+    console.log('afinn-165', afinn);
     var Analyzer = (natural as any).SentimentAnalyzer;
     var stemmer = require('natural').PorterStemmer;
     var analyzer = new Analyzer('English', stemmer, 'afinn');
