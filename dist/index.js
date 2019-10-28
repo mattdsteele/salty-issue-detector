@@ -6313,14 +6313,14 @@ const natural = __importStar(__webpack_require__(578));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const token = core.getInput('github-token');
-            const gh = new github_1.GitHub(token);
-            const issue_number = github_1.context.payload.issue.number;
             var Analyzer = natural.SentimentAnalyzer;
             var stemmer = __webpack_require__(578).PorterStemmer;
             var analyzer = new Analyzer('English', stemmer, 'afinn');
+            const token = core.getInput('github-token');
+            const gh = new github_1.GitHub(token);
             const words = github_1.context.payload.issue.body.split(' ');
             const result = analyzer.getSentiment(words);
+            const issue_number = github_1.context.payload.issue.number;
             const params = Object.assign({}, github_1.context.repo, { issue_number, body: `### Hello this is an automated comment!\n **Your sentiment was analyzed to: ${result}**` });
             console.log('params', params, token);
             const comment = yield gh.issues.createComment(params);

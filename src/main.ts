@@ -4,14 +4,14 @@ import * as natural from 'natural';
 
 async function run() {
   try {
-    const token = core.getInput('github-token');
-    const gh = new GitHub(token);
-    const issue_number = context.payload.issue!.number;
     var Analyzer = (natural as any).SentimentAnalyzer;
     var stemmer = require('natural').PorterStemmer;
     var analyzer = new Analyzer('English', stemmer, 'afinn');
+    const token = core.getInput('github-token');
+    const gh = new GitHub(token);
     const words = context.payload.issue!.body!.split(' ');
     const result = analyzer.getSentiment(words);
+    const issue_number = context.payload.issue!.number;
     const params = {
       ...context.repo,
       issue_number,

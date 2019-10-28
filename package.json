@@ -5,7 +5,8 @@
   "description": "TypeScript template action",
   "main": "dist/index.js",
   "scripts": {
-    "build": "ncc build src/main.ts",
+    "build": "ncc build src/main.ts && npm run copy",
+    "copy": "cp -R ./node_modules/natural/lib/natural/sentiment/English dist",
     "test": "jest"
   },
   "repository": {
