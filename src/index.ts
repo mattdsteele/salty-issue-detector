@@ -5,11 +5,15 @@ import * as natural from 'natural';
 async function run() {
   try {
     var Analyzer = (natural as any).SentimentAnalyzer;
-    var stemmer = require('natural').PorterStemmer;
+    const stemmer = natural.PorterStemmer;
     var analyzer = new Analyzer('English', stemmer, 'afinn');
+    const tokens = new natural.WordTokenizer().tokenize(
+      context.payload.issue!.body!
+    );
     const words = context.payload.issue!.body!.split(' ');
     console.log('going to parse: ', words);
-    const result = analyzer.getSentiment(words);
+    console.log('going to parse: ', tokens);
+    const result = analyzer.getSentiment(tokens);
     console.log('made it past analyzer', result);
     const token = core.getInput('github-token');
     const gh = new GitHub(token);
