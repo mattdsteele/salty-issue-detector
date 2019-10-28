@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: ./
+      - uses: mattdsteele/salty-issue-detector@releases
         with:
           milliseconds: 1000
           github-token: '${{ secrets.GITHUB_TOKEN }}'
