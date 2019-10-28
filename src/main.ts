@@ -5,8 +5,12 @@ async function run() {
   try {
     const token = core.getInput('github-token');
     const gh = new GitHub(token);
-    const payload = JSON.stringify(context.payload);
-    console.log(`Payload: ${payload}`);
+    const comment = await gh.issues.createComment({
+      issue_number: context.payload.issue,
+      ...context.payload.repo,
+      body: '### Hello this is an automated comment!\n'
+    });
+    console.log(`Payload: ${JSON.stringify(comment)}`);
   } catch (error) {
     core.setFailed(error.message);
   }

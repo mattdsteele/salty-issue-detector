@@ -2979,8 +2979,8 @@ function run() {
         try {
             const token = core.getInput('github-token');
             const gh = new github_1.GitHub(token);
-            const payload = JSON.stringify(github_1.context.payload);
-            console.log(`Payload: ${payload}`);
+            const comment = yield gh.issues.createComment(Object.assign({ issue_number: github_1.context.payload.issue }, github_1.context.payload.repo, { body: '### Hello this is an automated comment!\n' }));
+            console.log(`Payload: ${JSON.stringify(comment)}`);
         }
         catch (error) {
             core.setFailed(error.message);
