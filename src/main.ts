@@ -6,8 +6,8 @@ async function run() {
     const token = core.getInput('github-token');
     const gh = new GitHub(token);
     const comment = await gh.issues.createComment({
-      issue_number: context.payload.issue,
       ...context.payload.repo,
+      issue_number: context.payload.issue,
       body: '### Hello this is an automated comment!\n'
     });
     console.log(`Payload: ${JSON.stringify(comment)}`);
