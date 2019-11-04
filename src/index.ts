@@ -1,31 +1,54 @@
 import * as core from '@actions/core';
 import { GitHub, context } from '@actions/github';
 import * as natural from 'natural';
+import { WebhookPayload } from '@actions/github/lib/interfaces';
+
+const getBody = (payload: WebhookPayload, eventName: string): string => {
+  if (eventName === 'issue_comment') {
+    return payload.comment.body;
+  }
+  return payload.issue!.body!;
+};
+const getSentiment = (body: string) => {
+  const tokens = new natural.WordTokenizer().tokenize(body);
+
+  var Analyzer = (natural as any).SentimentAnalyzer;
+  const stemmer = natural.PorterStemmer;
+  var analyzer = new Analyzer('English', stemmer, 'afinn');
+  console.debug('going to parse: ', tokens);
+  const result: number = analyzer.getSentiment(tokens);
+  return result;
+};
+
+const getCustomMessage = (sentimentValue: number) => {
+  if (sentimentValue < 0) {
+    return `You're feeling a little salty today, eh? Remember this repository adheres to the [DBAD](https://dbad-license.org/) license`;
+  }
+  return 'Thanks for keeping it clean.';
+};
 
 async function run() {
   try {
-    var Analyzer = (natural as any).SentimentAnalyzer;
-    const stemmer = natural.PorterStemmer;
-    var analyzer = new Analyzer('English', stemmer, 'afinn');
-    const tokens = new natural.WordTokenizer().tokenize(
-      context.payload.issue!.body!
-    );
-    const words = context.payload.issue!.body!.split(' ');
-    console.log('going to parse: ', words);
-    console.log('going to parse: ', tokens);
-    const result = analyzer.getSentiment(tokens);
-    console.log('made it past analyzer', result);
+    const issue_number = context.payload.issue!.number;
+    const author = context.actor;
+    const body = getBody(context.payload, context.eventName);
+    const sentimentValue = getSentiment(body);
+    const customMessage = getCustomMessage(sentimentValue);
+    console.debug('made it past analyzer', sentimentValue);
     const token = core.getInput('github-token');
     const gh = new GitHub(token);
-    const issue_number = context.payload.issue!.number;
     const params = {
       ...context.repo,
       issue_number,
-      body: `### Hello this is an automated comment!\n **Your sentiment was analyzed to: ${result}**`
+      body: `
+### Hello @${author}! This is a bot! Beep boop. 🤖
+**Your sentiment was analyzed to: ${sentimentValue}**
+${customMessage}
+`
     };
-    console.log('params', params, token);
+    console.debug('params', params, token);
     const comment = await gh.issues.createComment(params);
-    console.log(`Payload: ${JSON.stringify(comment)}`);
+    console.debug(`Payload: ${JSON.stringify(comment)}`);
   } catch (error) {
     console.error(error);
     console.error('Sorry!');
@@ -39,5 +62,5 @@ const debug = async () => {
   console.log(payload);
 };
 
-debug();
-// run();
+// debug();
+run();
