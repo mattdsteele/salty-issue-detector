@@ -33,4 +33,11 @@ async function run() {
   }
 }
 
-run();
+const debug = async () => {
+  const { action, actor, eventName, payload } = context;
+  console.log(`${action} done by ${actor} with event name ${eventName}`);
+  console.log(payload);
+};
+
+debug();
+// run();

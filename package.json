@@ -5,6 +5,7 @@
   "description": "TypeScript template action",
   "main": "dist/index.js",
   "scripts": {
+    "dist-prep": "tsc && npm prune --production",
     "build": "tsc",
     "test": "jest"
   },
