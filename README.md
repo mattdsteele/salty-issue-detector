@@ -1,17 +1,17 @@
-# Issue Sentiment Analysis GitHub Action
+# Sentiment Analysis Action for GitHub Issues
 
-Uses the `natural` npm package to run a sentiment analysis on a new comment, and replies with a positive or negative rating.
+Uses the `natural` npm package to run a sentiment analysis on Issue comments, and replies with a positive or negative rating.
 
 # Usage
 
 ```yml
-name: Issue Sentiment Analyzer
+name: Issue Saltiness
 
 on:
   issue_comment:
     types: [created]
   issues:
-    types: [created]
+    types: [opened]
 
 jobs:
   sentiment:
